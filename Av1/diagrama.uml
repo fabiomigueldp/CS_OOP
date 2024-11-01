@@ -1,0 +1,71 @@
+@startuml
+
+class Pessoa {
+    - nome : String
+    - documento : String
+    + __init__(nome: String, documento: String)
+}
+
+class Funcionario {
+    - cracha : Cracha
+    + __init__(nome: String, documento: String, cracha: Cracha)
+}
+
+class Visitante {
+    - cracha : Cracha
+    - empresa : String
+    + __init__(nome: String, documento: String)
+}
+
+class VisitantePessoaFisica {
+    + __init__(nome: String, documento: String)
+}
+
+class VisitanteEmpresa {
+    + __init__(nome: String, documento: String, empresa: String)
+}
+
+class Cracha {
+    - id : int
+    - disponivel : Boolean
+    - visitante : Visitante
+    + __init__(id: int)
+}
+
+class LogAcesso {
+    - visitante : Visitante
+    - tipo_acesso : String
+    - data_hora : DateTime
+    - cracha_id : int
+    + __init__(visitante: Visitante, tipo_acesso: String, data_hora: DateTime)
+}
+
+class ControleAcesso {
+    - visitantes_no_predio : List<Visitante>
+    - historico_acessos : List<LogAcesso>
+    - crachas : List<Cracha>
+    - visitantes_registrados : List<Visitante>
+    + registrar_entrada_visitante() : void
+    + registrar_saida_visitante() : void
+    + consultar_visitantes_no_predio() : void
+    + consultar_historico_visitantes() : void
+    + executar() : void
+}
+
+Pessoa <|-- Funcionario
+Pessoa <|-- Visitante
+Visitante <|-- VisitantePessoaFisica
+Visitante <|-- VisitanteEmpresa
+
+Visitante "1" o-- "0..1" Cracha : cracha
+Cracha "1" o-- "0..1" Visitante : visitante
+
+LogAcesso "1" --> "1" Visitante : visitante
+LogAcesso "1" --> "0..1" Cracha : cracha_id
+
+ControleAcesso "1" --> "*" Visitante : visitantes_no_predio
+ControleAcesso "1" --> "*" Visitante : visitantes_registrados
+ControleAcesso "1" --> "*" Cracha : crachas
+ControleAcesso "1" --> "*" LogAcesso : historico_acessos
+
+@enduml
